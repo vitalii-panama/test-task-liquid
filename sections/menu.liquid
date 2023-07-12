@@ -1,0 +1,77 @@
+<style>
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  }
+  
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-content h3 {
+    font-weight: bold;
+    text-decoration: underline;
+    color: black;
+    padding: 12px 16px;
+  }
+  
+  .dropdown-content .shop-all {
+    font-style: italic;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  #shopify-section-menu {
+    position: relative;
+    z-index: 10;
+  }
+</style>
+
+{% assign menu = linklists[section.settings.menu] %}
+<nav>
+  {% for link in menu.links %}
+    <div class="dropdown">
+      <a href="{{ link.url }}">{{ link.title }}</a>
+      {% if link.links != blank %}
+        <div class="dropdown-content">
+          {% for sublink in link.links %}
+            <h3>{{ sublink.title }}</h3>
+            {% assign sortedLinks = sublink.links | sort: 'title' %}
+            {% for subsublink in sortedLinks %}
+              <a href="{{ subsublink.url }}">{{ subsublink.title }}</a>
+            {% endfor %}
+            <a href="{{ sublink.url }}" class="shop-all">Shop All</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+</nav>
+
+
+{% schema %}
+{
+  "name": "Mega Menu",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "menu" }
+  ],
+  "presets": [
+    {
+      "name": "Mega Menu"
+    }
+  ]
+}
+{% endschema %}
+
